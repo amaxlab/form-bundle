@@ -1,0 +1,28 @@
+{
+    "name": "amaxlab/form-bundle",
+    "description": "Provides some useful form types",
+    "type": "symfony-bundle",
+    "authors": [
+        {
+            "name": "Igor Bodnar",
+            "email": "ibodnar@amaxlab.ru",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "symfony/framework-bundle": "~2.5",
+        "symfony/form": "~2.5",
+        "twig/twig": "~1.0",
+        "guzzlehttp/guzzle": "~5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Amaxlab\\Bundle\\FormBundle\\": ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
+}

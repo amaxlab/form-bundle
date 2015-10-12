@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <!--G Recaptcha2 TYPE-->
+        <service id="amaxlab_form.amaxlab_recaptcha2.form.type" class="Amaxlab\Bundle\FormBundle\Form\Type\Recaptcha2Type">
+            <argument>%amaxlab_recaptcha2.public_key%</argument>
+            <argument>%amaxlab_recaptcha2.enabled%</argument>
+            <argument>%amaxlab_recaptcha2.locale_key%</argument>
+            <tag name="form.type" alias="amaxlab_recaptcha2" />
+        </service>
+
+        <service id="amaxlab_recaptcha2.validator.true" class="Amaxlab\Bundle\FormBundle\Validator\Constraints\ValidRecaptchaValidator">
+            <argument type="string">%amaxlab_recaptcha2.enabled%</argument>
+            <argument type="string">%amaxlab_recaptcha2.private_key%</argument>
+            <argument type="service" id="request_stack" />
+            <tag name="validator.constraint_validator" alias="amaxlab_recaptcha2.true" />
+        </service>
+        <!--END G Recaptcha2 TYPE-->
+
+        <!--SELECT OR ADD TYPE-->
+        <service id="amaxlab_form.select_or_add.form.type" class="Amaxlab\Bundle\FormBundle\Form\Type\SelectOrAddType">
+            <tag name="form.type" alias="select_or_add" />
+        </service>
+        <!--END SELECT OR ADD TYPE-->
+
+    </services>
+
+</container>

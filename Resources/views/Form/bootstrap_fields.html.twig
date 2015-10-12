@@ -1,0 +1,81 @@
+{% block amaxlab_recaptcha2_widget %}
+    {% spaceless %}
+        <div {{ block('widget_container_attributes') }}{% if horizontal_input_wrapper_class is defined %} class="{{ horizontal_input_wrapper_class }}{% endif %}">
+            {% if form.vars.recaptcha2_enabled %}
+                <script src='{{ form.vars.recaptcha2_api }}'></script>
+                <div class="g-recaptcha" data-sitekey="{{ form.vars.public_key }}"></div>
+                {% if (inline is not defined and horizontal is not defined) or (not inline and horizontal) %}
+                    {{ block('form_message') }}
+                {% endif %}
+            {% endif %}
+        </div>
+    {% endspaceless %}
+{% endblock amaxlab_recaptcha2_widget %}
+
+{% block select_or_add_widget %}{% spaceless %}
+    <div class="col-lg-9">
+        {{ form_widget(form.state) }}
+        <div id="select_or_add_wrapper_{{ form.entity.vars.id }}" data-select-or-add-entity-id="{{ form.vars.id }}" {% if form.vars.multiple %}data-select-or-add-multiple="true" {% endif %}data-select-prototype="{{ form_widget(form.entity)|e }}"
+             data-add-prototype="{% if form.new_entity is defined %}
+            {{ form_widget(form.new_entity)|e }}
+        {% elseif form.new_entities is defined %}
+            {{ form_row(form.new_entities)|e  }}
+        {% endif %}">
+        </div>
+        <div class="form-group">
+            <div class="col-lg-9">
+                <a class="not-handled" data-select-or-add-wrapper-id="#select_or_add_wrapper_{{ form.entity.vars.id }}" data-form-state-id="#{{ form.state.vars.id }}" data-select-or-add-state="{% if form.state.vars.value == "add" %}add{% else %}select{% endif %}" data-select-text="{{ form.vars.to_select_text|trans({}, translation_domain) }}" data-add-text="{{ form.vars.to_new_text|trans({}, translation_domain) }}"></a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="container-fluid">
+            <div class="row">
+                <div id="select_or_add_full_size_{{ form.vars.id }}" class="col-lg-12"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        (function($) {
+            function refreshSelectOrAdd(btn, wrapper){
+                $(wrapper).closest('form').trigger('select-or-add-change');
+                var newContent;
+                var newText;
+                if (btn.data('select-or-add-state') == 'select'){
+                    newContent = wrapper.data('select-prototype');
+                    newText = btn.data('add-text');
+                } else if (btn.data('select-or-add-state') == 'add'){
+                    newContent = wrapper.data('add-prototype');
+                    newText = btn.data('select-text');
+                }
+                if (wrapper.data('select-or-add-multiple')){
+                    newContent = wrapper.data('select-prototype');
+                    newText = "";
+                    $('#select_or_add_full_size_'+wrapper.data('select-or-add-entity-id')).html(wrapper.data('add-prototype'));
+                }
+                wrapper.html(newContent);
+                btn.html(newText);
+            }
+
+            $('.not-handled[data-select-or-add-wrapper-id]').each(function(i,el){
+                var $el = $(el);
+                $el.removeClass('not-handled');
+                refreshSelectOrAdd($el, $($el.data('select-or-add-wrapper-id')) );
+                $el.on('click', function(e){
+                    console.log('click');
+                    var btn = $(e.target);
+                    var wrapper = $(btn.data('select-or-add-wrapper-id'));
+                    if (btn.data('select-or-add-state') == 'select'){
+                        btn.data('select-or-add-state', 'add');
+                        $(btn.data('form-state-id')).val('add');
+                    } else if (btn.data('select-or-add-state') == 'add'){
+                        btn.data('select-or-add-state', 'select');
+                        $(btn.data('form-state-id')).val('select');
+                    }
+                    refreshSelectOrAdd(btn, wrapper);
+                });
+            });
+
+        })(jQuery);
+    </script>
+{% endspaceless %}{% endblock select_or_add_widget %}
