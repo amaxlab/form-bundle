@@ -4,7 +4,7 @@
             {% if form.vars.recaptcha2_enabled %}
                 <script src='{{ form.vars.recaptcha2_api }}'></script>
                 <div class="g-recaptcha" data-sitekey="{{ form.vars.public_key }}"></div>
-                {% if (inline is not defined and horizontal is not defined) or (not inline and horizontal) %}
+                {% if inline is not defined or not inline %}
                     {{ block('form_message') }}
                 {% endif %}
             {% endif %}
